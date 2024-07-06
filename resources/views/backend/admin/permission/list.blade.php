@@ -37,24 +37,28 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if ($permissions->isNotEmpty())
                             @foreach ($permissions as $permission)
                             <tr>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
-                                    {{ $permission->id }}
+                                    {{ $loop->iteration }}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
                                     {{ $permission->name }}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
-                                    <a href="{{ route('permission.edit', $permission->id) }}" class="text-indigo-400 hover:text-indigo-200">Edit</a>
-                                    <form action="{{ route('permission.destroy', $permission->id) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-400 hover:text-red-200">Delete</button>
-                                    </form>
+                                    <a href="{{ route('permission.edit', $permission->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
+                                    <a href="javascript:void(0);" onclick="deletePermission({{ $permission->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
                                 </td>
                             </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="4" class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
+                                    {{ "No Data available" }}
+                                </td>
+                            </tr>
+                            @endif
                         </tbody>
                     </table>
 
@@ -65,4 +69,27 @@
             </div>
         </div>
     </div>
+    <x-slot name="script">
+        <script type="text/javascript">
+            function deletePermission(id) {
+                if (confirm("Are you sure want to delete?")) {
+                    $.ajax({
+                        url: '{{ route('permission.destroy') }}', 
+						type: 'delete', 
+						data: {
+                            id: id
+                        }, 
+						dataType: 'json', 
+						headers: {
+                            'x-csrf-token': '{{ csrf_token() }}'
+                        }, 
+						success: function(response) {
+                            window.location.href = '{{ route('permission.index') }}';
+                        }
+                    });
+                }
+            }
+
+        </script>
+    </x-slot>
 </x-app-layout>

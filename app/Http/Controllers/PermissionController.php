@@ -54,18 +54,49 @@ class PermissionController extends Controller
     public function show($id)
     {
     }
-
+    /**
+     * Edit the specified resource.
+     */
+    public function edit($id)
+    {
+        $permission = Permission::findOrFail($id);
+        return view('backend.admin.permission.edit', compact('permission'));
+    }
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
+        $permission = Permission::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'name'  => 'required|min:3|unique:permissions,name,' . $id . 'id'
+        ]);
+        if ($validator->passes()) {
+            $permission->name = $request->name;
+            $permission->update();
+            return redirect()->route('permission.index')->with('success', 'Permissions update successfully');
+        } else {
+            return redirect()->route('permission.edit', $id)->withInput()->withErrors($validator);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->id;
+        $permission = Permission::findOrFail($id);
+        if ($permission == null) {
+            session()->flash('error', 'Permission not found');
+            return response()->json([
+                'status' => 'false',
+            ]);
+        }
+        $permission->delete();
+        session()->flash('success', 'Permission deleted successfully');
+        return response()->json([
+            'status' => 'true',
+        ]);
     }
 }
