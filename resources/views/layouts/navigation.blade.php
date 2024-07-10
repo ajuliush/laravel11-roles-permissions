@@ -17,8 +17,13 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('permission.index')" :active="request()->routeIs('permission.index')">
+                    <x-nav-link :href="route('permission.index')" :active="request()->routeIs('permission.index') || request()->routeIs('permission.create') || request()->routeIs('permission.edit')">
                         {{ __('Permissions') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('role.index')" :active="request()->routeIs('role.index') || request()->routeIs('role.create')">
+                        {{ __('Roles') }}
                     </x-nav-link>
                 </div>
             </div>
