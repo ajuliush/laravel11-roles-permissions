@@ -28,7 +28,7 @@
                                 @if($permissions->isNotEmpty())
                                 @foreach ($permissions as $item)
                                 <div class="mt-3">
-                                    <input type="checkbox" name="permission[]" id="permission-{{ $item->id }}" value="{{ $item->name }}" class="rounded">
+                                    <input {{ ($hasPermissions->contains($item->name)) ? 'checked': '' }} type="checkbox" name="permission[]" id="permission-{{ $item->id }}" value="{{ $item->name }}" class="rounded">
                                     <label for="permission-{{ $item->id }}">{{ $item->name }}</label>
                                 </div>
                                 @endforeach

@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/roles/store', [RoleController::class, 'store'])->name('role.store');
     Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('role.edit');
     Route::post('/roles/{id}/update', [RoleController::class, 'update'])->name('role.update');
+    Route::delete('/roles/', [RoleController::class, 'destroy'])->name('role.destroy');
 });
 
 require __DIR__ . '/auth.php';

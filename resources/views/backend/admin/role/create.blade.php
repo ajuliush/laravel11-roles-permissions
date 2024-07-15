@@ -24,16 +24,17 @@
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="grid grid-cols-4 mb-3">
-                                @if($permissions->isNotEmpty())
-                                @foreach ($permissions as $item)
-                                <div class="mt-3">
-                                    <input type="checkbox" name="permission[]" id="permission-{{ $item->id }}" value="{{ $item->name }}" class="rounded">
-                                    <label for="permission-{{ $item->id }}">{{ $item->name }}</label>
-                                </div>
-                                @endforeach
-                                @endif
-                            </div>
+				<div class="grid grid-cols-4 gap-4 mb-3">
+					@if($permissions->isNotEmpty())
+						@foreach ($permissions as $item)
+							<div class="flex items-center w-full">
+								<input type="checkbox" name="permission[]" id="permission-{{ $item->id }}" value="{{ $item->name }}" class="rounded mr-2">
+								<label for="permission-{{ $item->id }}">{{ $item->name }}</label>
+							</div>
+						@endforeach
+					@endif
+				</div>
+
                             <button class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Submit</button>
                         </div>
                     </form>
