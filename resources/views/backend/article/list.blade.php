@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center mb-6">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('List Roles') }}
+                {{ __('List Article') }}
             </h2>
-			@can('create role')
-            <a href="{{ route('role.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
+			@can('create article')
+            <a href="{{ route('article.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
                 Create
             </a>
 			@endcan
@@ -17,11 +17,11 @@
             <x-message></x-message>
             <div class="bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
-                    <form method="GET" action="{{ route('role.index') }}">
+                    <form method="GET" action="{{ route('article.index') }}">
                         <div class="flex items-center mb-4">
-                            <input type="text" name="search" placeholder="Search role..." class="bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:bg-gray-600" value="{{ request('search') }}">
+                            <input type="text" name="search" placeholder="Search permissions..." class="bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:bg-gray-600" value="{{ request('search') }}">
                             <button type="submit" class="ml-3 bg-blue-500 text-white px-4 py-2 rounded-md">Search</button>
-                            <a href="{{ route('role.index') }}" class="ml-3 bg-red-500 text-white px-4 py-2 rounded-md">Clear</a>
+                            <a href="{{ route('article.index') }}" class="ml-3 bg-red-500 text-white px-4 py-2 rounded-md">Clear</a>
                         </div>
                     </form>
                     <table class="min-w-full leading-normal">
@@ -31,10 +31,13 @@
                                     ID
                                 </th>
                                 <th class="px-5 py-3 border-b-2 border-gray-600 bg-gray-700 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                                    Name
+                                    Title
                                 </th>
                                 <th class="px-5 py-3 border-b-2 border-gray-600 bg-gray-700 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                                    Permission
+                                    Text
+                                </th>
+                                <th class="px-5 py-3 border-b-2 border-gray-600 bg-gray-700 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                                    Author
                                 </th>
                                 <th class="px-5 py-3 border-b-2 border-gray-600 bg-gray-700 text-left text-xs font-semibold text-white uppercase tracking-wider">
                                     Actions
@@ -42,28 +45,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($roles->isNotEmpty())
-                            @foreach ($roles as $role)
+                            @if ($articles->isNotEmpty())
+                            @foreach ($articles as $article)
                             <tr>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
                                     {{ $loop->iteration }}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
-                                    {{ $role->name }}
+                                    {{ $article->title }}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
-                                    {{$role->permissions->pluck('name')->implode(', ')}}
+                                    {{ $article->text }}
                                 </td>
-                             <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
-							<div class="inline-flex space-x-2">
-							@can('edit role')
-								<a href="{{ route('role.edit', $role->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-							@endcan
-							@can('delete role')
-								<a href="javascript:void(0);" onclick="deleteRole({{ $role->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-							@endcan
-							</div>
-						</td>
+                                <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
+                                    {{ $article->author }}
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
+								@can('edit article')
+                                    <a href="{{ route('article.edit', $article->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
+									@endcan
+									@can('delete article')
+                                    <a href="javascript:void(0);" onclick="deletePermission({{ $article->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
+									@endcan
+                                </td>
                             </tr>
                             @endforeach
                             @else
@@ -77,32 +81,28 @@
                     </table>
 
                     <div class="mt-4">
-                        {{ $roles->appends(request()->query())->links() }}
+                        {{ $articles->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <x-slot name="script">
-        <script type="text/javascript">
-            function deleteRole(id) {
+         <script type="text/javascript">
+            function deletePermission(id) {
                 if (confirm("Are you sure want to delete?")) {
                     $.ajax({
-                        url: '{{ route('role.destroy') }}'
-                        , type: 'delete'
-                        , data: {
-                            id: id
+                        url: '{{ route('article.destroy') }}',
+						type: 'delete',
+						data: {id: id}, 
+						dataType: 'json', 
+						headers: {'x-csrf-token': '{{ csrf_token() }}'}, 
+						success: function(response) {
+                                  window.location.href = '{{ route('article.index') }}';
                         }
-                        , dataType: 'json'
-                        , headers: {
-                            'x-csrf-token': '{{ csrf_token() }}'
-                        }
-                        , success: function(response) {
-                            window.location.href = '{{ route('role.index') }}';
-                        }
-                    });
-                }
-            }
+                        });
+                         }
+                         }
 
         </script>
     </x-slot>

@@ -16,16 +16,34 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                @can('view permission')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('permission.index')" :active="request()->routeIs('permission.index') || request()->routeIs('permission.create') || request()->routeIs('permission.edit')">
                         {{ __('Permissions') }}
                     </x-nav-link>
                 </div>
+                @endcan
+                @can('view role')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('role.index')" :active="request()->routeIs('role.index') || request()->routeIs('role.create')">
+                    <x-nav-link :href="route('role.index')" :active="request()->routeIs('role.index') || request()->routeIs('role.create')|| request()->routeIs('role.edit')">
                         {{ __('Roles') }}
                     </x-nav-link>
                 </div>
+                @endcan
+                @can('view user')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.index') || request()->routeIs('user.create')|| request()->routeIs('user.edit')">
+                        {{ __('Users') }}
+                    </x-nav-link>
+                </div>
+                @endcan
+                @can('view article')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('article.index')" :active="request()->routeIs('article.index') || request()->routeIs('article.create')|| request()->routeIs('article.edit')">
+                        {{ __('Articles') }}
+                    </x-nav-link>
+                </div>
+                @endcan
             </div>
 
             <!-- Settings Dropdown -->
@@ -33,7 +51,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div>{{ Auth::user()->name }} ({{ Auth::user()->roles->pluck('name')->implode(', ') }})</div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

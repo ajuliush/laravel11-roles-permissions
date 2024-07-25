@@ -4,9 +4,11 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('List Permissions') }}
             </h2>
+            @can('create permission')
             <a href="{{ route('permission.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
                 Create
             </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -47,8 +49,12 @@
                                     {{ $permission->name }}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
+                                    @can('edit permission')
                                     <a href="{{ route('permission.edit', $permission->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
+                                    @endcan
+                                    @can('delete permission')
                                     <a href="javascript:void(0);" onclick="deletePermission({{ $permission->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach
@@ -74,16 +80,16 @@
             function deletePermission(id) {
                 if (confirm("Are you sure want to delete?")) {
                     $.ajax({
-                        url: '{{ route('permission.destroy') }}', 
-						type: 'delete', 
-						data: {
+                        url: '{{ route('permission.destroy') }}'
+                        , type: 'delete'
+                        , data: {
                             id: id
-                        }, 
-						dataType: 'json', 
-						headers: {
+                        }
+                        , dataType: 'json'
+                        , headers: {
                             'x-csrf-token': '{{ csrf_token() }}'
-                        }, 
-						success: function(response) {
+                        }
+                        , success: function(response) {
                             window.location.href = '{{ route('permission.index') }}';
                         }
                     });
