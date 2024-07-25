@@ -49,10 +49,10 @@
                                     {{ $loop->iteration }}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
-                                    {{ $role->name }}
+                                    {{ucfirst( $role->name )}}
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
-                                    {{$role->permissions->pluck('name')->implode(', ')}}
+                                    {{ucfirst($role->permissions->pluck('name')->implode(', '))}}
                                 </td>
                              <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
 							<div class="inline-flex space-x-2">
