@@ -4,11 +4,11 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('List Users') }}
             </h2>
-			@can('create user')
+            @can('create user')
             <a href="{{ route('user.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
                 Create
             </a>
-			@endcan
+            @endcan
         </div>
     </x-slot>
 
@@ -62,12 +62,12 @@
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-600 bg-gray-800 text-sm text-white">
                                     <div class="inline-flex space-x-2">
-									@can('edit user')
+                                        @can('edit user')
                                         <a href="{{ route('user.edit', $user->id) }}" class="bg-slate-700 text-sm rounded-md text-white px-3 py-2 hover:bg-slate-600">Edit</a>
-									@endcan
-									@can('delete user')
+                                        @endcan
+                                        @can('delete user')
                                         <a href="javascript:void(0);" onclick="deleteUser({{ $user->id }})" class="bg-red-600 text-sm rounded-md text-white px-3 py-2 hover:bg-red-500">Delete</a>
-									@endcan
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
