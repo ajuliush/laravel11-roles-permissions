@@ -90,28 +90,24 @@
         </div>
     </div>
     <x-slot name="script">
-        {{-- <script type="text/javascript">
-            function deleteRole(id) {
+         <script type="text/javascript">
+            function deleteUser(id) {
                 if (confirm("Are you sure want to delete?")) {
                     $.ajax({
-                        url: '{{ route('
-                        role.destroy ') }}'
-        , type: 'delete'
-        , data: {
-        id: id
-        }
-        , dataType: 'json'
-        , headers: {
-        'x-csrf-token': '{{ csrf_token() }}'
-        }
-        , success: function(response) {
-        window.location.href = '{{ route('
-                            role.index ') }}';
-        }
-        });
-        }
-        }
-
-        </script> --}}
+                        url: '{{ route('user.destroy') }}', 
+                        type: 'delete', 
+                        data: {
+                            id: id
+                        }, 
+                        dataType: 'json', 
+                        headers: {
+                           'x-csrf-token': '{{ csrf_token() }}'
+                            }, 
+                            success: function(response) {
+                                    window.location.href = '{{ route('user.index') }}'
+                                }});
+                            }
+                        }
+        </script> 
     </x-slot>
 </x-app-layout>
